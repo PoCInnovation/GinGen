@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gingen/parseFile"
 	"gingen/src"
 )
 
@@ -17,7 +18,7 @@ func main() {
 	arguments := src.ArgumentGetter()
 	src.ArgumentErrorHandler(arguments)
 	content := src.ReadFile(arguments.InputFile)
-	for _, line := range content {
-		fmt.Println(line)
-	}
+	comments := parseFile.GetComments(content)
+	fmt.Println(comments)
+
 }
