@@ -2,23 +2,27 @@ package main
 
 import (
 	"fmt"
-	"gingen/parseFile"
-	"gingen/src"
+	endpointparser "gingen/src/EndpointParser"
 )
 
-// func convert_json(data interface{}) []byte {
-// 	content, err := json.Marshal(data)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	return (content)
-// }
-
 func main() {
-	arguments := src.ArgumentGetter()
-	src.ArgumentErrorHandler(arguments)
-	content := src.ReadFile(arguments.InputFile)
-	comments := parseFile.GetComments(content)
-	fmt.Println(comments)
-
+	// arguments := src.ArgumentGetter()
+	// src.ArgumentErrorHandler(arguments)
+	// content := src.ReadFile(arguments.InputFile, false)
+	// comments := parseFile.GetComments(content)
+	// fmt.Println(comments)
+	var text = []string{
+		"//@Method: GET",
+		"//@Path: /user",
+		"//@HandlerId: controllers.GetUser",
+		"//@Summary: GetUser",
+		"//@Description: Get a user based on my ass",
+		"//@Headers",
+		"//@-Manger: true, Description",
+	}
+	endpoints, err := endpointparser.ParseEndpoint(text)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(endpoints)
 }

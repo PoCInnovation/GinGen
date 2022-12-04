@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// This struct is used to store the arguments passed to the program
 type Argument struct {
 	InputFile  string
 	OutputFile string
@@ -38,7 +39,7 @@ func getOneArgument(index int, prompt string) string {
 func ArgumentGetter() Argument {
 	argument := Argument{
 		InputFile:  getOneArgument(0, "Please enter the input file path: "),
-		// OutputFile: getOneArgument(1, "Please enter the output file path: "),
+		OutputFile: getOneArgument(1, "Please enter the output file path: "),
 	}
 	return argument
 }
@@ -57,21 +58,21 @@ func ArgumentErrorHandler(arguments Argument) {
 		fmt.Println("The input file is a directory")
 		os.Exit(1)
 	}
-	// stat, err = os.Stat(arguments.OutputFile)
-	// if err != nil {
-	// 	fmt.Println("The output file will be created")
-	// 	fd, err := os.Create(arguments.OutputFile)
-	// 	if err != nil {
-	// 		fmt.Printf("Error creating file: %v\n", err)
-	// 		os.Exit(1)
-	// 	}
-	// 	fd.Close()
-	// } else if stat.IsDir() {
-	// 	fmt.Println("The output file is a directory")
-	// 	os.Exit(1)
-	// }
-	// if arguments.InputFile == arguments.OutputFile {
-	// 	fmt.Println("The input file and the output file are the same")
-	// 	os.Exit(1)
-	// }
+	stat, err = os.Stat(arguments.OutputFile)
+	if err != nil {
+		fmt.Println("The output file will be created")
+		fd, err := os.Create(arguments.OutputFile)
+		if err != nil {
+			fmt.Printf("Error creating file: %v\n", err)
+			os.Exit(1)
+		}
+		fd.Close()
+	} else if stat.IsDir() {
+		fmt.Println("The output file is a directory")
+		os.Exit(1)
+	}
+	if arguments.InputFile == arguments.OutputFile {
+		fmt.Println("The input file and the output file are the same")
+		os.Exit(1)
+	}
 }
