@@ -6,7 +6,7 @@ import (
 	"regexp"
 )
 
-var comment_regexp = regexp.MustCompile(`^[ ]*//.*`)
+var comment_regexp = regexp.MustCompile(`^[ |\t]*//.*`)
 
 /** @brief This function is used to get the file content and return it as an array of string with one line for each case.
  * @param path The path to the file. The path MUST BE VALID.
@@ -31,4 +31,30 @@ func ReadFile(path string, only_comment bool) []string {
 		}
 	}
 	return text
+}
+
+/** @brief This function is used to write content in the file path given in parameter.
+ * @param path The path to the file.
+ * @param content The content to write in the file.
+ * @return []string the content of the file
+ */
+func WriteFile(path string, content []string) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer func() error {
+		err := file.Close()
+		if err != nil {
+			return err
+		}
+		return nil
+	}()
+	for _, line := range content {
+		_, err := file.WriteString(line + "\n")
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

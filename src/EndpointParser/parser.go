@@ -7,25 +7,25 @@ import (
 )
 
 // This regexp is used to match the endpoint http method
-var methodsRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(method)[ ]*:[ ]*(?i)(GET|POST|PUT|HEAD|DELETE|CONNECT|OPTIONS|TRACE|PATCH)`)
+var methodsRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(method)[ ]*:[ ]*(?i)(GET|POST|PUT|HEAD|DELETE|CONNECT|OPTIONS|TRACE|PATCH)`)
 
 // This regexp is used to match the endpoint path
-var pathRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(path)[ ]*:[ ]*(/.*)*`)
+var pathRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(path)[ ]*:[ ]*(/.*)*`)
 
 // This regexp is used to match the endpoint handlerid
-var handlerIdRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(handlerid)[ ]*:[ ]*(.*)`)
+var handlerIdRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(handlerid)[ ]*:[ ]*(.*)`)
 
 // This regexp is used to match the endpoint summary
-var summaryRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(summary)[ ]*:[ ]*(.*)`)
+var summaryRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(summary)[ ]*:[ ]*(.*)`)
 
 // This regexp is used to match the endpoint description
-var descriptionRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(description)[ ]*:[ ]*(.*)`)
+var descriptionRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(description)[ ]*:[ ]*(.*)`)
 
 // This regexp is used to match the endpoint headers
-var headersRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(headers)`)
+var headersRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(headers)`)
 
 // This function is used to parse the endpoint headers sub-information from the comment
-var subHeaderRegexp = regexp.MustCompile(`^[ ]*//@-[ ]*(.*)[ ]*:[ ]*(?i)(true|false)[ ]*,(.*)`)
+var subHeaderRegexp = regexp.MustCompile(`^[ |\t]*//@-[ ]*(.*)[ ]*:[ ]*(?i)(true|false)[ ]*,(.*)`)
 
 /** @brief This function is used to parse the endpoint information for an headers from the comment
  * @param comments The comments to parse. This parameter is a slice of string begin at the line after the regexp HeaderRegexp match.
@@ -70,7 +70,7 @@ func ParseEndpoint(comments []string) ([]EndpointData, error) {
 		if headersRegexp.MatchString(line) {
 			headers, err := parseHeader(comments[index+1:])
 			if err != nil {
-				return []EndpointData{}, err
+				return []EndpointData{}, errors.New(err.Error() + " in endpoint " + currentEndpoint.Path)
 			}
 			currentEndpoint.Headers = append(currentEndpoint.Headers, headers...)
 		}
@@ -100,5 +100,8 @@ func ParseEndpoint(comments []string) ([]EndpointData, error) {
 	if len(endpoints) == 0 && !is_not_empty {
 		return []EndpointData{}, errors.New("no endpoint found")
 	}
-	return append(endpoints, currentEndpoint), nil
+	if is_not_empty {
+		return append(endpoints, currentEndpoint), nil
+	}
+	return endpoints, nil
 }
