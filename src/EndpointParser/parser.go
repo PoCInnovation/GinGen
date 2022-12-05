@@ -6,14 +6,31 @@ import (
 	"strings"
 )
 
+// This regexp is used to match the endpoint http method
 var methodsRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(method)[ ]*:[ ]*(?i)(GET|POST|PUT|HEAD|DELETE|CONNECT|OPTIONS|TRACE|PATCH)`)
+
+// This regexp is used to match the endpoint path
 var pathRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(path)[ ]*:[ ]*(/.*)*`)
+
+// This regexp is used to match the endpoint handlerid
 var handlerIdRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(handlerid)[ ]*:[ ]*(.*)`)
+
+// This regexp is used to match the endpoint summary
 var summaryRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(summary)[ ]*:[ ]*(.*)`)
+
+// This regexp is used to match the endpoint description
 var descriptionRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(description)[ ]*:[ ]*(.*)`)
+
+// This regexp is used to match the endpoint headers
 var headersRegexp = regexp.MustCompile(`^[ ]*//@[ ]*(?i)(headers)`)
+
+// This function is used to parse the endpoint headers sub-information from the comment
 var subHeaderRegexp = regexp.MustCompile(`^[ ]*//@-[ ]*(.*)[ ]*:[ ]*(?i)(true|false)[ ]*,(.*)`)
 
+/** @brief This function is used to parse the endpoint information for an headers from the comment
+ * @param comments The comments to parse. This parameter is a slice of string begin at the line after the regexp HeaderRegexp match.
+ * @return []Header the list of headers found in the comments params
+ */
 func parseHeader(comments []string) ([]Header, error) {
 	var headers []Header
 	for _, line := range comments {
@@ -38,7 +55,10 @@ func parseHeader(comments []string) ([]Header, error) {
 	}
 }
 
-// This function is used to parse the endpoint information from the comment
+/** @brief This function is used to parse the endpoint information from the comment
+ * @param comments The comments to parse.
+ * @return []EndpointData the list of endpoint found in the comments params or an error if the endpoint is not fully defined
+ */
 func ParseEndpoint(comments []string) ([]EndpointData, error) {
 	var endpoints []EndpointData
 	currentEndpoint := EndpointData{}
