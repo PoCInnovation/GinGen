@@ -12,5 +12,5 @@ jobs:
       - name: Repository checkout
         uses: actions/checkout@v2
       - name: Unit tests
-        run: cd ./go; go test -v ./...
+        run: go test -v ./...
         timeout-minutes: 2
