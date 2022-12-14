@@ -25,7 +25,7 @@ var descriptionRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(description)[ ]*
 var headersRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(headers)`)
 
 // This function is used to parse the endpoint headers sub-information from the comment
-var subHeaderRegexp = regexp.MustCompile(`^[ |\t]*//@-[ ]*(.*)[ ]*:[ ]*(?i)(true|false)[ ]*,(.*)`)
+var subHeaderRegexp = regexp.MustCompile(`^[ |\t]*//@-[ ]*([A-z|1-9]*)[ ]*:[ ]*(?i)(true|false)[ ]*,[ ]*(.*)`)
 
 /** @brief This function is used to parse the endpoint information for an headers from the comment
  * @param comments The comments to parse. This parameter is a slice of string begin at the line after the regexp HeaderRegexp match.

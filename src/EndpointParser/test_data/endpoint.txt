@@ -1,0 +1,24 @@
+//@Method: GET
+//@Path: /user
+//@HandlerId: controllers.GetUser
+//@Summary: GetUser
+//@Description: Get a user based on user name
+//@Headers
+//@-Manger: true, Description
+
+    //@Method  : POST
+		//@Path: /user
+     	  //@     HandlerId    : controllers.PostUser
+		//@   Summary   : PostUser
+	//@Description:           Post user data
+//@   Headers
+//@-  Hello   : false    ,    optional username
+
+		//@   Summary   : DeleteUser
+    //@Method  : DELETE
+		//@Path: /user
+	//@Description:           Delete user data
+//@   Headers
+//@-  Hello   : false    ,    optional username
+//@-no   : true    , test me please
+     	  //@     HandlerId    : controllers.DeleteUser
