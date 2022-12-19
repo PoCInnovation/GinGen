@@ -1,10 +1,12 @@
 package main
 
 import (
+	// "context"
 	"encoding/json"
 	"fmt"
 	"gingen/src"
 	endpointparser "gingen/src/EndpointParser"
+	handlerparser "gingen/src/handlerParser"
 )
 
 func convert_json(data interface{}) []byte {
@@ -19,11 +21,14 @@ func main() {
 	arguments := src.ArgumentGetter()
 	src.ArgumentErrorHandler(arguments)
 	content := src.ReadFile(arguments.InputFile, true)
-	endpoints, err := endpointparser.ParseEndpoint(content)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	json_content := convert_json(endpoints)
-	src.WriteFile(arguments.OutputFile, []string{string(json_content)})
+	endpoints, _ := endpointparser.ParseEndpoint(content)
+	handlers := handlerparser.GetHandlers(content)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	jsonHandlers := convert_json(handlers)
+	jsonEndpoints := convert_json(endpoints)
+	src.WriteFile(arguments.OutputFile, []string{string(jsonEndpoints)})
+	src.WriteFile(arguments.OutputFile, []string{string(jsonHandlers)})
 }
