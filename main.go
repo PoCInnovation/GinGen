@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "context"
 	"encoding/json"
 	"fmt"
 	"gingen/src"
@@ -20,7 +19,11 @@ func convert_json(data interface{}) []byte {
 func main() {
 	arguments := src.ArgumentGetter()
 	src.ArgumentErrorHandler(arguments)
-	content := src.ReadFile(arguments.InputFile, true)
+	content, err := src.ReadFile(arguments.InputFile, true)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	endpoints, _ := endpointparser.ParseEndpoint(content)
 	handlers := handlerparser.GetHandlers(content)
 	// if err != nil {

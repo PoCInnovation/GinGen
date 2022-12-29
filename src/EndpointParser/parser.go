@@ -19,13 +19,13 @@ var handlerIdRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(handlerid)[ ]*:[ ]
 var summaryRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(summary)[ ]*:[ ]*(.*)`)
 
 // This regexp is used to match the endpoint description
-var descriptionRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(description)[ ]*:[ ]*(.*)`)
+var endpointDescriptionRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(description)[ ]*:[ ]*(.*)`)
 
 // This regexp is used to match the endpoint headers
 var headersRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(headers)`)
 
 // This function is used to parse the endpoint headers sub-information from the comment
-var subHeaderRegexp = regexp.MustCompile(`^[ |\t]*//@-[ ]*(.*)[ ]*:[ ]*(?i)(true|false)[ ]*,(.*)`)
+var subHeaderRegexp = regexp.MustCompile(`^[ |\t]*//@-[ ]*([A-z|0-9]*)[ ]*:[ ]*(?i)(true|false)[ ]*,[ ]*(.*)`)
 
 /** @brief This function is used to parse the endpoint information for an headers from the comment
  * @param comments The comments to parse. This parameter is a slice of string begin at the line after the regexp HeaderRegexp match.
@@ -86,8 +86,8 @@ func ParseEndpoint(comments []string) ([]EndpointData, error) {
 			submatch := summaryRegexp.FindStringSubmatch(line)
 			currentEndpoint.Summary = submatch[2]
 		}
-		if descriptionRegexp.MatchString(line) {
-			submatch := descriptionRegexp.FindStringSubmatch(line)
+		if endpointDescriptionRegexp.MatchString(line) {
+			submatch := endpointDescriptionRegexp.FindStringSubmatch(line)
 			currentEndpoint.Description = submatch[2]
 		}
 		is_not_empty := currentEndpoint.Method != "" && currentEndpoint.Path != "" && currentEndpoint.HandlerID != "" && currentEndpoint.Summary != "" && len(currentEndpoint.Headers) != 0

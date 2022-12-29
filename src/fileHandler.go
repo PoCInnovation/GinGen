@@ -11,11 +11,13 @@ var comment_regexp = regexp.MustCompile(`^[ |\t]*//.*`)
 /** @brief This function is used to get the file content and return it as an array of string with one line for each case.
  * @param path The path to the file. The path MUST BE VALID.
  * @param only_comment If true, the function will return only the comments. If false, the function will return the whole file.
- * @return []string the content of the file
+ * @return []string the content of the file or an error if the file cannot be read.
  */
-func ReadFile(path string, only_comment bool) []string {
-	// The error is not handled here because it is handled in the main function by the ArgumentErrorHandler() function
-	file, _ := os.Open(path)
+func ReadFile(path string, only_comment bool) ([]string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
 	// Close the file when the function is done
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
@@ -30,7 +32,7 @@ func ReadFile(path string, only_comment bool) []string {
 			text = append(text, line)
 		}
 	}
-	return text
+	return text, nil
 }
 
 /** @brief This function is used to write content in the file path given in parameter.
