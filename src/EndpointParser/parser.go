@@ -1,7 +1,6 @@
 package endpointparser
 
 import (
-	"errors"
 	"regexp"
 	"strings"
 )
@@ -27,19 +26,21 @@ var headersRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(headers)`)
 // This function is used to parse the endpoint headers sub-information from the comment
 var subHeaderRegexp = regexp.MustCompile(`^[ |\t]*//@-[ ]*([A-z|0-9]*)[ ]*:[ ]*(?i)(true|false)[ ]*,[ ]*(.*)`)
 
+// This regexp is used to match the handler start
+var startRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(EndPointDeclaration_Start)`)
+
+// This regexp is used to match the handler end
+var endRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(EndPointDeclaration_end)`)
+
 /** @brief This function is used to parse the endpoint information for an headers from the comment
  * @param comments The comments to parse. This parameter is a slice of string begin at the line after the regexp HeaderRegexp match.
  * @return []Header the list of headers found in the comments params
  */
-func parseHeader(comments []string) ([]Header, error) {
+func parseHeader(comments []string) []Header {
 	var headers []Header
 	for _, line := range comments {
 		if !subHeaderRegexp.MatchString(line) {
-			if len(headers) > 0 {
-				return headers, nil
-			} else {
-				return []Header{}, errors.New("no header found")
-			}
+			return headers
 		}
 		submatch := subHeaderRegexp.FindStringSubmatch(line)
 		headers = append(headers, Header{
@@ -48,19 +49,10 @@ func parseHeader(comments []string) ([]Header, error) {
 			Description: submatch[3],
 		})
 	}
-	if len(headers) > 0 {
-		return headers, nil
-	} else {
-		return []Header{}, errors.New("no header found")
-	}
+	return headers
 }
 
-/** @brief This function is used to parse the endpoint information from the comment
- * @param comments The comments to parse.
- * @return []EndpointData the list of endpoint found in the comments params or an error if the endpoint is not fully defined
- */
-func ParseEndpoint(comments []string) ([]EndpointData, error) {
-	var endpoints []EndpointData
+func parseOneEndpoint(comments []string) EndpointData {
 	currentEndpoint := EndpointData{}
 	for index, line := range comments {
 		if methodsRegexp.MatchString(line) {
@@ -68,10 +60,7 @@ func ParseEndpoint(comments []string) ([]EndpointData, error) {
 			currentEndpoint.Method = strings.ToUpper(submatch[2])
 		}
 		if headersRegexp.MatchString(line) {
-			headers, err := parseHeader(comments[index+1:])
-			if err != nil {
-				return []EndpointData{}, errors.New(err.Error() + " in endpoint " + currentEndpoint.Path)
-			}
+			headers := parseHeader(comments[index+1:])
 			currentEndpoint.Headers = append(currentEndpoint.Headers, headers...)
 		}
 		if pathRegexp.MatchString(line) {
@@ -90,18 +79,23 @@ func ParseEndpoint(comments []string) ([]EndpointData, error) {
 			submatch := endpointDescriptionRegexp.FindStringSubmatch(line)
 			currentEndpoint.Description = submatch[2]
 		}
-		is_not_empty := currentEndpoint.Method != "" && currentEndpoint.Path != "" && currentEndpoint.HandlerID != "" && currentEndpoint.Summary != "" && len(currentEndpoint.Headers) != 0
-		if is_not_empty {
-			endpoints = append(endpoints, currentEndpoint)
-			currentEndpoint = EndpointData{}
+		if endRegexp.MatchString(line) {
+			break
 		}
 	}
-	is_not_empty := currentEndpoint.Method != "" && currentEndpoint.Path != "" && currentEndpoint.HandlerID != "" && currentEndpoint.Summary != "" && len(currentEndpoint.Headers) != 0
-	if len(endpoints) == 0 && !is_not_empty {
-		return []EndpointData{}, errors.New("no endpoint found")
+	return currentEndpoint
+}
+
+/** @brief This function is used to parse the endpoint information from the comment
+ * @param comments The comments to parse.
+ * @return []EndpointData the list of endpoint found in the comments params or an error if the endpoint is not fully defined
+ */
+func ParseEndpoint(comments []string) []EndpointData {
+	var endpoints []EndpointData
+	for index, line := range comments {
+		if startRegexp.MatchString(line) {
+			endpoints = append(endpoints, parseOneEndpoint(comments[index+1:]))
+		}
 	}
-	if is_not_empty {
-		return append(endpoints, currentEndpoint), nil
-	}
-	return endpoints, nil
+	return endpoints
 }

@@ -10,10 +10,7 @@ func TestParseEndPoint(t *testing.T) {
 	if err != nil {
 		t.Errorf("The file should be read without error but got %s", err)
 	}
-	endpoints, err := ParseEndpoint(content)
-	if err != nil {
-		t.Errorf("The file should be parsed without error but got %s", err)
-	}
+	endpoints := ParseEndpoint(content)
 	if len(endpoints) != 3 {
 		t.Errorf("The file should have 3 endpoints but got %d", len(endpoints))
 	}

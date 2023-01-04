@@ -1,3 +1,4 @@
+//@EndPointDeclaration_Start
 //@Method: GET
 //@Path: /user
 //@HandlerId: controllers.GetUser
@@ -5,7 +6,9 @@
 //@Description: Get a user based on user name
 //@Headers
 //@-Manger: true, Description
+//@EndPointDeclaration_end
 
+//@EndPointDeclaration_start
     //@Method  : POST
 		//@Path: /user
      	  //@     HandlerId    : controllers.PostUser
@@ -13,7 +16,9 @@
 	//@Description:           Post user data
 //@   Headers
 //@-  Hello   : false    ,    optional username
+//@EndPointDeclaration_end
 
+//@EndPointDeclaration_start
 		//@   Summary   : DeleteUser
     //@Method  : DELETE
 		//@Path: /user
@@ -22,3 +27,4 @@
 //@-  Hello   : false    ,    optional username
 //@-no   : true    , test me please
      	  //@     HandlerId    : controllers.DeleteUser
+//@EndPointDeclaration_end
