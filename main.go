@@ -6,7 +6,7 @@ import (
 	"gingen/src"
 	endpointparser "gingen/src/EndpointParser"
 	info "gingen/src/InfoParser"
-	handlerparser "gingen/src/handlerParser"
+	handlerparser "gingen/src/HandlerParser"
 )
 
 type APIinfo struct {
