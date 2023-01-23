@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"gingen/src"
-	endpointparser "gingen/src/EndpointParser"
 	info "gingen/src/InfoParser"
+	endpointparser "gingen/src/EndpointParser"
 	handlerparser "gingen/src/HandlerParser"
 )
 
@@ -40,6 +40,20 @@ func mergeStructs(endpoints []endpointparser.EndpointData, handlers []handlerpar
 	return apiDetails
 }
 
+func buildHandlersAndEndpoints(comments []string) ([]endpointparser.EndpointData, []handlerparser.HandlerData) {
+	var endpoints []endpointparser.EndpointData;
+	var handlers []handlerparser.HandlerData;
+	for index, line := range comments {
+		if endpointparser.StartRegexp.MatchString(line) {
+			endpoints = append(endpoints, endpointparser.ParseOneEndpoint(comments[index+1:]))
+		}
+		if handlerparser.StartRegexp.MatchString(line) {
+			handlers = append(handlers, handlerparser.HandlerParser(comments[index+1:]))
+		}
+	}
+	return endpoints, handlers;
+}
+
 func main() {
 	arguments := src.ArgumentGetter()
 	src.ArgumentErrorHandler(arguments)
@@ -48,8 +62,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	endpoints := endpointparser.ParseEndpoint(content)
-	handlers := handlerparser.GetHandlers(content)
+	endpoints, handlers := buildHandlersAndEndpoints(content);
 	info, _ := info.ParseInfo(content)
 	apiDetails := mergeStructs(endpoints, handlers)
 	apiInfo := APIinfo{Info: info, Details: apiDetails}
