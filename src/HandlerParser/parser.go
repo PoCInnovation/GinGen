@@ -6,10 +6,10 @@ import (
 )
 
 // This regexp is used to match the handler start
-var startRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(HandlerDeclaration_Start)`)
+var StartRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(HandlerDeclaration_Start)`)
 
 // This regexp is used to match the handler end
-var endRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(Handlerdeclaration_end)`)
+var EndRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(Handlerdeclaration_end)`)
 
 // This regexp is used to match the handler handlerid
 var handlerIdRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(handlerid)[ |\t]*:[ |\t]*(.*)`)
@@ -100,7 +100,7 @@ func getResBody(comments []string) ResponseBody {
  * @param comments The comments to parse
  * @return HandlerData a handlers created by the informations
  */
-func handlerParser(comments []string) HandlerData {
+func HandlerParser(comments []string) HandlerData {
 	handler := HandlerData{}
 	for index, line := range comments {
 		if handlerIdRegexp.MatchString(line) {
@@ -113,23 +113,23 @@ func handlerParser(comments []string) HandlerData {
 		if responseRegexp.MatchString(line) {
 			handler.ResponseBodys = append(handler.ResponseBodys, getResBody(comments[index+1:]))
 		}
-		if endRegexp.MatchString(line) {
+		if EndRegexp.MatchString(line) {
 			break
 		}
 	}
 	return handler
 }
 
-/** @brief This function iterates trough the content passed as parametter and add a new handler element everytime it hit "//@HandlerDeclaration_Start"
- * @param content The content to parse
- * @return []HandlerData the list of handlers found in the content params
- */
-func GetHandlers(content []string) []HandlerData {
-	var handlers []HandlerData
-	for index, line := range content {
-		if startRegexp.MatchString(line) {
-			handlers = append(handlers, handlerParser(content[index+1:]))
-		}
-	}
-	return handlers
-}
+// /** @brief This function iterates trough the content passed as parametter and add a new handler element everytime it hit "//@HandlerDeclaration_Start"
+//  * @param content The content to parse
+//  * @return []HandlerData the list of handlers found in the content params
+//  */
+// func GetHandlers(content []string) []HandlerData {
+// 	var handlers []HandlerData
+// 	for index, line := range content {
+// 		if StartRegexp.MatchString(line) {
+// 			handlers = append(handlers, handlerParser(content[index+1:]))
+// 		}
+// 	}
+// 	return handlers
+// }
