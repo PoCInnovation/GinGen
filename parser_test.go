@@ -6,11 +6,11 @@ import (
 )
 
 func TestParseEndPoint(t *testing.T) {
-	content, err := src.ReadFile("test_data/endpoint.txt", true)
-	if err != nil {
-		t.Errorf("The file should be read without error but got %s", err)
+	endpointContent, endpointErr := src.ReadFile("test_data/endpoint.txt", true)
+	if endpointErr != nil {
+		t.Errorf("The file should be read without error but got %s", endpointErr)
 	}
-	endpoints, handlers := buildHandlersAndEndpoints(content)
+	endpoints, _ := buildHandlersAndEndpoints(endpointContent)
 
 	// ENDPOINTS
 	if len(endpoints) != 3 {
@@ -104,6 +104,12 @@ func TestParseEndPoint(t *testing.T) {
 		t.Errorf("The third endpoint should have header no with description test me please but got %s", endpoints[2].Headers[1].Description)
 	}
 
+
+	handlerContent, handlerErr := src.ReadFile("test_data/handler.txt", true)
+	if handlerErr != nil {
+		t.Errorf("The file should be read without error but got %s", handlerErr)
+	}
+	_, handlers := buildHandlersAndEndpoints(handlerContent)
 
 	// HANDLERS
 	if len(handlers) != 2 {
