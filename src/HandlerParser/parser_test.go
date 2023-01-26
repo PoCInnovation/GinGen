@@ -66,22 +66,33 @@ func TestGetHandlers(t *testing.T) {
 	if len(handlers[0].ResponseBodys) != 2 {
 		t.Errorf("The first handler should have 2 ResponseBodys but got '%d'", len(handlers[0].ResponseBodys))
 	}
-	if handlers[0].ResponseBodys[0].Status != 200 {
-		t.Errorf("The first ResponseBodys of the first handler should have the Status '200' but got '%d'", handlers[0].ResponseBodys[0].Status)
+	if len(handlers[0].ResponseBodys[0].Status) != 1 {
+		t.Errorf("The first ResponseBodys should have 1 statuses but is '%d'", len(handlers[0].ResponseBodys[0].Status))
 	}
-	if handlers[0].ResponseBodys[0].Description != "Was able to create a user" {
-		t.Errorf("The first ResponseBodys of the first handler should have the Description 'Was able to create a user' but got '%s'", handlers[0].ResponseBodys[0].Description)
+	if len(handlers[0].ResponseBodys[1].Status) != 1 {
+		t.Errorf("The first ResponseBodys should have 1 statuses but is '%d'", len(handlers[0].ResponseBodys[1].Status))
 	}
-	if handlers[0].ResponseBodys[0].SchemaPath != "/path/to/mes couilles" {
-		t.Errorf("The first ResponseBodys of the first handler should have the SchemaPath '/path/to/mes couilles' but got '%s'", handlers[0].ResponseBodys[0].SchemaPath)
+
+	value200, ok200 := handlers[0].ResponseBodys[0].Status[200]
+	if !ok200 {
+		t.Errorf("The first ResponseBodys should have a status of 200 but got nothing")
 	}
-	if handlers[0].ResponseBodys[1].Status != 400 {
-		t.Errorf("The second ResponseBodys of the first handler should have the Status '200' but got '%d'", handlers[0].ResponseBodys[1].Status)
+	if value200.Description != "Was able to create a user" {
+		t.Errorf("The first ResponseBodys of the first handler should have the Description 'Was able to create a user' but got '%s'", value200.Description)
 	}
-	if handlers[0].ResponseBodys[1].Description != "Couldn't create new user because the given email already exists in the data base" {
-		t.Errorf("The second ResponseBodys of the first handler should have the Description 'Couldn't create new user because the given email already exists in the data base' but got '%s'", handlers[0].ResponseBodys[1].Description)
+	if value200.SchemaPath != "/path/to/mes couilles" {
+		t.Errorf("The first ResponseBodys of the first handler should have the SchemaPath '/path/to/mes couilles' but got '%s'", value200.SchemaPath)
 	}
-	if handlers[0].ResponseBodys[1].SchemaPath != "/path/to/mes couilles" {
-		t.Errorf("The second ResponseBodys of the first handler should have the SchemaPath '/path/to/mes couilles' but got '%s'", handlers[0].ResponseBodys[1].SchemaPath)
+	
+	value400, ok400 := handlers[0].ResponseBodys[1].Status[400]
+
+	if !ok400 {
+		t.Errorf("The second ResponseBodys of the first handler should have the Status '400' but got nothing")
+	}
+	if value400.Description != "Couldn't create new user because the given email already exists in the data base" {
+		t.Errorf("The second ResponseBodys of the first handler should have the Description 'Couldn't create new user because the given email already exists in the data base' but got '%s'", value400.Description)
+	}
+	if value400.SchemaPath != "/path/to/mes couilles" {
+		t.Errorf("The second ResponseBodys of the first handler should have the SchemaPath '/path/to/mes couilles' but got '%s'", value400.SchemaPath)
 	}
 }

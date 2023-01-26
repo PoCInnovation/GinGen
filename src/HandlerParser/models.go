@@ -6,11 +6,13 @@ type RequestBody struct {
 	IsRequired		bool
 }
 
-type ResponseBody struct {
-	Status		int
+type StatusDetails struct {
 	Description	string
 	SchemaPath	string
+}
 
+type ResponseBody struct {
+	Status		map[int]StatusDetails
 }
 
 // This struct is used to store hander informations

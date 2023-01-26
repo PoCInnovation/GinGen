@@ -70,26 +70,30 @@ func getReqBody(comments []string) RequestBody {
  */
 func getResBody(comments []string) ResponseBody {
 	var resBody ResponseBody
-
+	var statusDetails StatusDetails
+	var status int 
 	for _, line := range comments {
 		foundComment := false
 		if descriptionRegexp.MatchString(line) {
 			submatch := descriptionRegexp.FindStringSubmatch(line)
-			resBody.Description = submatch[2]
+			statusDetails.Description = submatch[2]
 			foundComment = true
 		}
 		if schemaRegexp.MatchString(line) {
 			submatch := schemaRegexp.FindStringSubmatch(line)
-			resBody.SchemaPath = submatch[2]
+			statusDetails.SchemaPath = submatch[2]
 			foundComment = true
 		}
 		if statusRegexp.MatchString(line) {
 			submatch := statusRegexp.FindStringSubmatch(line)
-			resBody.Status, _ = strconv.Atoi(submatch[2])
+			status, _ = strconv.Atoi(submatch[2])
 			foundComment = true
 		}
 
 		if !foundComment {
+			newMap := make(map[int]StatusDetails)
+			newMap[status] = statusDetails
+			resBody.Status = newMap
 			break
 		}
 	}

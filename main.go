@@ -19,9 +19,9 @@ func main() {
 	endpoints := endpointparser.ParseEndpoint(content)
 	handlers := handlerparser.GetHandlers(content)
 	info, _ := info.ParseInfo(content)
-	apiDetails := src.MergeStructs(endpoints, handlers)
-	apiInfo := src.APIinfo{OpenApiVersion: "3.0.3", Info: info, Details: apiDetails}
+	endpointDetails := src.MergeStructs(endpoints, handlers)
+	apiInfo := src.APIinfo{OpenApiVersion: "3.0.3", Info: info, Details: endpointDetails}
 	jsonDetails := src.ConvertJson(apiInfo)
 	src.WriteFile(arguments.OutputFile, []string{string(jsonDetails)})
-	// src.ConvertDetails(src.APIDetails{})
+	// src.ConvertDetails(src.EndpointDetails{})
 }

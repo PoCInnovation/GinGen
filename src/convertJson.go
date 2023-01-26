@@ -9,14 +9,15 @@ import (
 )
 
 type APIinfo struct {
-	OpenApiVersion string       `json:"openapi"`
-	Info           info.Info    `json:"info"`
-	Details        []APIDetails `json:"paths"`
+	OpenApiVersion string            `json:"openapi"`
+	Info           info.Info         `json:"info"`
+	Details        []EndpointDetails `json:"paths"`
 }
 
-type APIDetails struct {
-	EndPoint endpointparser.EndpointData `json:"endpoint"`
-	Handlers []handlerparser.HandlerData `json:"handlers"`
+type EndpointDetails struct {
+	EndPoint  endpointparser.EndpointData  `json:"endpoint"`
+	Requests  []handlerparser.RequestBody  `json:"requestBody"`
+	Responses []handlerparser.ResponseBody `json:"responses"`
 }
 
 // "paths": {
@@ -26,13 +27,13 @@ type APIDetails struct {
 // 			"description": "Update an existing pet by Id",
 // 			"operationId"
 
-func ConvertDetails(details []APIDetails) []interface{} {
+func ConvertDetails(details []EndpointDetails) []interface{} {
 	// mapD := map[string]interface{}{"apple": 5, "test": map[string]int{"lettuce": 7}}
 	// mapB, _ := json.Marshal(mapD)
 	// fmt.Println(string(mapB))
 	var result []interface{}
 	for _, detail := range details {
-		result = append(result, map[string]interface{}{detail.EndPoint.Path: map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Handlers, "responses": detail.Handlers}}})
+		result = append(result, map[string]interface{}{detail.EndPoint.Path: map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Requests, "responses": detail.Responses}}})
 	}
 	return result
 }
@@ -46,15 +47,16 @@ func ConvertJson(data APIinfo) []byte {
 	return (content)
 }
 
-func MergeStructs(endpoints []endpointparser.EndpointData, handlers []handlerparser.HandlerData) []APIDetails {
-	var apiDetails []APIDetails
+func MergeStructs(endpoints []endpointparser.EndpointData, handlers []handlerparser.HandlerData) []EndpointDetails {
+	var endpointDetails []EndpointDetails
 	for _, endpoint := range endpoints {
-		apiDetails = append(apiDetails, APIDetails{EndPoint: endpoint})
+		endpointDetails = append(endpointDetails, EndpointDetails{EndPoint: endpoint})
 		for _, handler := range handlers {
 			if handler.HandlerId == endpoint.HandlerID {
-				apiDetails[len(apiDetails)-1].Handlers = append(apiDetails[len(apiDetails)-1].Handlers, handler)
+				endpointDetails[len(endpointDetails)-1].Requests = append(endpointDetails[len(endpointDetails)-1].Requests, handler.RequestBodys...)
+				endpointDetails[len(endpointDetails)-1].Responses = append(endpointDetails[len(endpointDetails)-1].Responses, handler.ResponseBodys...)
 			}
 		}
 	}
-	return apiDetails
+	return endpointDetails
 }
