@@ -29,7 +29,7 @@ If you're interested in how the project is organized at a higher level, please c
 ## Our PoC team :heart:
 
 Developers
-| [<img src="https://github.com/VidsSkids.png?size=85" width=85><br><sub>Victor Massonnat</sub>](https://github.com/VidsSkids) | [<img src="https://github.com/HKtueur1.png?size=85" width=85><br><sub>Timothée De Boynes</sub>](https://github.com/HKtueur1)
+| [<img src="https://github.com/VidsSkids.png?size=85" width=85><br><sub>Victor Massonnat</sub>](https://github.com/VidsSkids) | [<img src="https://github.com/TdeBoynes.png?size=85" width=85><br><sub>Timothée De Boynes</sub>](https://github.com/HKtueur1)
 | :---: | :---: |
 
 Manager
