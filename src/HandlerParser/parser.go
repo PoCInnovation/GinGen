@@ -119,17 +119,3 @@ func HandlerParser(comments []string) HandlerData {
 	}
 	return handler
 }
-
-// /** @brief This function iterates trough the content passed as parametter and add a new handler element everytime it hit "//@HandlerDeclaration_Start"
-//  * @param content The content to parse
-//  * @return []HandlerData the list of handlers found in the content params
-//  */
-// func GetHandlers(content []string) []HandlerData {
-// 	var handlers []HandlerData
-// 	for index, line := range content {
-// 		if StartRegexp.MatchString(line) {
-// 			handlers = append(handlers, handlerParser(content[index+1:]))
-// 		}
-// 	}
-// 	return handlers
-// }
