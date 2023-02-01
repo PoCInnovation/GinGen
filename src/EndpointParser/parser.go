@@ -85,17 +85,3 @@ func ParseOneEndpoint(comments []string) EndpointData {
 	}
 	return currentEndpoint
 }
-
-// /** @brief This function is used to parse the endpoint information from the comment
-//  * @param comments The comments to parse.
-//  * @return []EndpointData the list of endpoint found in the comments params or an error if the endpoint is not fully defined
-//  */
-// func ParseEndpoint(comments []string) []EndpointData {
-// 	var endpoints []EndpointData
-// 	for index, line := range comments {
-// 		if StartRegexp.MatchString(line) {
-// 			endpoints = append(endpoints, parseOneEndpoint(comments[index+1:]))
-// 		}
-// 	}
-// 	return endpoints
-// }
