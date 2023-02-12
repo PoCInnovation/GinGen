@@ -12,7 +12,7 @@ jobs:
       - name: Repository checkout
         uses: actions/checkout@v3
       - name: build
-        uses: make
+        run: make
       - name: Run test
         run: $(pwd)/functional_tests/functional_test.sh
         timeout-minutes: 2
