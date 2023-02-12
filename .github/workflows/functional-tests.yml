@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v3
       - name: build
         run: go build -o GinGen main.go
-      - name: Run test
-        run: ls functional_tests
+      - name: Run binary
+        run: ./GinGen $(pwd)/functional_tests/testing_file $(pwd)/functional_tests/output_test.json
+      - name: Compare output
+        run: diff $(pwd)/functional_tests/output_test.json $(pwd)/functional_tests/default_output.json
         timeout-minutes: 2
