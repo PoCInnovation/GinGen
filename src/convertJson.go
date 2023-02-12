@@ -6,6 +6,7 @@ import (
 	endpointparser "gingen/src/EndpointParser"
 	handlerparser "gingen/src/HandlerParser"
 	info "gingen/src/InfoParser"
+	"strconv"
 )
 
 type APIinfo struct {
@@ -20,34 +21,48 @@ type EndpointDetails struct {
 	Responses []handlerparser.ResponseBody `json:"responses"`
 }
 
-func ConvertDetails(details []EndpointDetails) map[string]interface{} {
-	// mapD := map[string]interface{}{"apple": 5, "test": map[string]int{"lettuce": 7}}
-	// mapB, _ := json.Marshal(mapD)
-	// fmt.Println(string(mapB))
+// mapD := map[string]interface{}{"apple": 5, "test": map[string]int{"lettuce": 7}}
+// mapB, _ := json.Marshal(mapD)
+// fmt.Println(string(mapB))
+
+func convertRequest(requestBodys []handlerparser.RequestBody) map[string]interface{} {
 	result := make(map[string]interface{})
-	for _, detail := range details {
-		if result[detail.EndPoint.Path] != nil {
-			result[detail.EndPoint.Path].(map[string]interface{})[detail.EndPoint.Method] = map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Requests, "responses": detail.Responses}
-		} else {
-			result[detail.EndPoint.Path] = map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Requests, "responses": detail.Responses}}
+	for _, requestBody := range requestBodys {
+		result["description"] = requestBody.Description
+		result["required"] = requestBody.IsRequired
+		result["content"] = requestBody.SchemaPath
+	}
+	return result
+}
+
+func convertResponse(responses []handlerparser.ResponseBody) map[string]interface{} {
+	result := make(map[string]interface{})
+	for _, response := range responses {
+		for key, value := range response.Status {
+			result[strconv.Itoa(key)] = map[string]interface{}{"description": value.Description, "content": value.SchemaPath}
 		}
 	}
 	return result
 }
 
-// func ConvertDetails(details []EndpointDetails) []interface{} {
-// 	// mapD := map[string]interface{}{"apple": 5, "test": map[string]int{"lettuce": 7}}
-// 	// mapB, _ := json.Marshal(mapD)
-// 	// fmt.Println(string(mapB))
-// 	var result []interface{}
-// 	for _, detail := range details {
-// 		result = append(result, map[string]interface{}{detail.EndPoint.Path: map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Requests, "responses": detail.Responses}}})
-// 	}
-// 	return result
-// }
+func convertDetails(details []EndpointDetails) map[string]interface{} {
+	result := make(map[string]interface{})
+	for _, detail := range details {
+		if result[detail.EndPoint.Path] != nil {
+			result[detail.EndPoint.Path].(map[string]interface{})[detail.EndPoint.Method] = map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": convertRequest(detail.Requests), "responses": convertResponse(detail.Responses)}
+		} else {
+			result[detail.EndPoint.Path] = map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": convertRequest(detail.Requests), "responses": convertResponse(detail.Responses)}}
+		}
+	}
+	return result
+}
 
+/** @brief This function is used to convert the api INFO in the right json forma
+ *  @param data: The data to convert in json
+ *  @return []byte the result of the marshal conversion
+ */
 func ConvertJson(data APIinfo) []byte {
-	newData := map[string]interface{}{"openapi": "3.0.3", "info": data.Info, "paths": ConvertDetails(data.Details)}
+	newData := map[string]interface{}{"openapi": "3.0.3", "info": data.Info, "paths": convertDetails(data.Details)}
 	content, err := json.MarshalIndent(newData, "", "    ")
 	if err != nil {
 		fmt.Println(err)
