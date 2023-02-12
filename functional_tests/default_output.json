@@ -1,0 +1,43 @@
+{
+    "info": {
+        "title": "test",
+        "description": "description test",
+        "version": "1.3"
+    },
+    "openapi": "3.0.3",
+    "paths": {
+        "/user": {
+            "DELETE": {
+                "description": "Delete user data",
+                "requestBody": {},
+                "responses": {},
+                "summary": "DeleteUser"
+            },
+            "GET": {
+                "description": "Get a user based on user name",
+                "requestBody": {
+                    "content": "/path/to/l afrique",
+                    "description": "creates a new user based on the content of the body",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": "/path/to/mes couilles",
+                        "description": "Was able to create a user"
+                    },
+                    "400": {
+                        "content": "/path/to/mes couilles",
+                        "description": "Couldn't create new user because the given email already exists in the data base"
+                    }
+                },
+                "summary": "CreateUser"
+            },
+            "POST": {
+                "description": "Post user data",
+                "requestBody": {},
+                "responses": {},
+                "summary": "PostUser"
+            }
+        }
+    }
+}

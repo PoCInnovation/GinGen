@@ -1,0 +1,18 @@
+name: Unit tests
+
+on:
+  push:
+
+jobs:
+  functional_tests:
+    name: "Run functional tests"
+    runs-on: ubuntu-latest
+    container: golang:1.18-alpine
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v3
+      - name: build
+        uses: make
+      - name: Run test
+        run: $(pwd)/functional_tests/functional_test.sh
+        timeout-minutes: 2
