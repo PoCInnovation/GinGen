@@ -20,23 +20,31 @@ type EndpointDetails struct {
 	Responses []handlerparser.ResponseBody `json:"responses"`
 }
 
-// "paths": {
-// 	"/pet": {
-// 		"put": {
-// 			"summary": "Update an existing pet",
-// 			"description": "Update an existing pet by Id",
-// 			"operationId"
-
-func ConvertDetails(details []EndpointDetails) []interface{} {
+func ConvertDetails(details []EndpointDetails) map[string]interface{} {
 	// mapD := map[string]interface{}{"apple": 5, "test": map[string]int{"lettuce": 7}}
 	// mapB, _ := json.Marshal(mapD)
 	// fmt.Println(string(mapB))
-	var result []interface{}
+	result := make(map[string]interface{})
 	for _, detail := range details {
-		result = append(result, map[string]interface{}{detail.EndPoint.Path: map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Requests, "responses": detail.Responses}}})
+		if result[detail.EndPoint.Path] != nil {
+			result[detail.EndPoint.Path].(map[string]interface{})[detail.EndPoint.Method] = map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Requests, "responses": detail.Responses}
+		} else {
+			result[detail.EndPoint.Path] = map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Requests, "responses": detail.Responses}}
+		}
 	}
 	return result
 }
+
+// func ConvertDetails(details []EndpointDetails) []interface{} {
+// 	// mapD := map[string]interface{}{"apple": 5, "test": map[string]int{"lettuce": 7}}
+// 	// mapB, _ := json.Marshal(mapD)
+// 	// fmt.Println(string(mapB))
+// 	var result []interface{}
+// 	for _, detail := range details {
+// 		result = append(result, map[string]interface{}{detail.EndPoint.Path: map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": detail.Requests, "responses": detail.Responses}}})
+// 	}
+// 	return result
+// }
 
 func ConvertJson(data APIinfo) []byte {
 	newData := map[string]interface{}{"openapi": "3.0.3", "info": data.Info, "paths": ConvertDetails(data.Details)}
