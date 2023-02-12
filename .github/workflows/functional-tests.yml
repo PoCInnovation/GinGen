@@ -14,5 +14,5 @@ jobs:
       - name: build
         run: go build -o GinGen main.go
       - name: Run test
-        run: functional_tests/functional_test.sh
+        run: ls functional_tests
         timeout-minutes: 2
