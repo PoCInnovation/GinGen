@@ -70,6 +70,11 @@ func ConvertJson(data APIinfo) []byte {
 	return (content)
 }
 
+/** @brief This function is used to merge the endpoint and handler data
+ *  @param endpoints: The endpoint data
+ *  @param handlers: The handler data
+ *  @return []EndpointDetails the result of the merge
+ */
 func MergeStructs(endpoints []endpointparser.EndpointData, handlers []handlerparser.HandlerData) []EndpointDetails {
 	var endpointDetails []EndpointDetails
 	for _, endpoint := range endpoints {
