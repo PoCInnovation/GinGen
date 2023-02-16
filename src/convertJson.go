@@ -7,6 +7,7 @@ import (
 	handlerparser "gingen/src/HandlerParser"
 	info "gingen/src/InfoParser"
 	"strconv"
+	"strings"
 )
 
 type APIinfo struct {
@@ -49,9 +50,17 @@ func convertDetails(details []EndpointDetails) map[string]interface{} {
 	result := make(map[string]interface{})
 	for _, detail := range details {
 		if result[detail.EndPoint.Path] != nil {
-			result[detail.EndPoint.Path].(map[string]interface{})[detail.EndPoint.Method] = map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": convertRequest(detail.Requests), "responses": convertResponse(detail.Responses)}
+			result[detail.EndPoint.Path].(map[string]interface{})[strings.ToLower(detail.EndPoint.Method)] = map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description}
 		} else {
-			result[detail.EndPoint.Path] = map[string]interface{}{detail.EndPoint.Method: map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description, "requestBody": convertRequest(detail.Requests), "responses": convertResponse(detail.Responses)}}
+			result[detail.EndPoint.Path] = map[string]interface{}{strings.ToLower(detail.EndPoint.Method): map[string]interface{}{"summary": detail.EndPoint.Summary, "description": detail.EndPoint.Description}}
+		}
+		requestResult := convertRequest(detail.Requests)
+		if len(requestResult) != 0 {
+			result[detail.EndPoint.Path].(map[string]interface{})[strings.ToLower(detail.EndPoint.Method)].(map[string]interface{})["requestBody"] = requestResult
+		}
+		responseResult := convertResponse(detail.Responses)
+		if len(responseResult) != 0 {
+			result[detail.EndPoint.Path].(map[string]interface{})[strings.ToLower(detail.EndPoint.Method)].(map[string]interface{})["responses"] = responseResult
 		}
 	}
 	return result
