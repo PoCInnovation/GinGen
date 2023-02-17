@@ -2,11 +2,11 @@ package handlerparser
 
 
 type Reference struct {
-	SchemaPath	string
+	SchemaPath	string `json:"$ref"`
 }
 
 type Schema struct {
-	Ref Reference `json:"$ref"`
+	Ref Reference `json:"schema"`
 }
 
 type Content struct {
