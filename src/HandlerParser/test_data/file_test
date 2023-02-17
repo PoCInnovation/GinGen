@@ -5,6 +5,7 @@ package controllers
 //@HandlerId: controllers.CreateUser
 //@RequestBody
 //@-Description: creates a new user based on the content of the body
+//@-Types: application/json,application/xml,application/x-www-form-urlencoded
 //@-Schema: /path/to/l afrique
 //@-required: true
 //@Response

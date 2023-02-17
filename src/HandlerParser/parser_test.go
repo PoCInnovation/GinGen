@@ -56,8 +56,8 @@ func TestGetHandlers(t *testing.T) {
 	if handlers[0].RequestBodys[0].Description != "creates a new user based on the content of the body" {
 		t.Errorf("The first RequestBodys of the first handler should have the Description 'creates a new user based on the content of the body' but got '%s'", handlers[0].RequestBodys[0].Description)
 	}
-	if handlers[0].RequestBodys[0].SchemaPath != "/path/to/l afrique" {
-		t.Errorf("The first RequestBodys of the first handler should have the SchemaPath '/path/to/l afrique' but got '%s'", handlers[0].RequestBodys[0].SchemaPath)
+	if handlers[0].RequestBodys[0].Content.ContentInfo["application/json"].Ref.SchemaPath != "/path/to/l afrique" {
+		t.Errorf("The first RequestBodys of the first handler should have the SchemaPath '/path/to/l afrique' but got '%s'", handlers[0].RequestBodys[0].Content.ContentInfo["application/json"].Ref.SchemaPath)
 	}
 	if handlers[0].RequestBodys[0].IsRequired != true {
 		t.Errorf("The first RequestBodys of the first handler should have the IsRequired 'true' but got 'false'")
@@ -80,8 +80,8 @@ func TestGetHandlers(t *testing.T) {
 	if value200.Description != "Was able to create a user" {
 		t.Errorf("The first ResponseBodys of the first handler should have the Description 'Was able to create a user' but got '%s'", value200.Description)
 	}
-	if value200.SchemaPath != "/path/to/mes couilles" {
-		t.Errorf("The first ResponseBodys of the first handler should have the SchemaPath '/path/to/mes couilles' but got '%s'", value200.SchemaPath)
+	if value200.Content.ContentInfo["application/json"].Ref.SchemaPath != "/path/to/mes couilles" {
+		t.Errorf("The first ResponseBodys of the first handler should have the SchemaPath '/path/to/mes couilles' but got '%s'", value200.Content.ContentInfo["application/json"].Ref.SchemaPath)
 	}
 	
 	value400, ok400 := handlers[0].ResponseBodys[1].Status[400]
@@ -92,7 +92,7 @@ func TestGetHandlers(t *testing.T) {
 	if value400.Description != "Couldn't create new user because the given email already exists in the data base" {
 		t.Errorf("The second ResponseBodys of the first handler should have the Description 'Couldn't create new user because the given email already exists in the data base' but got '%s'", value400.Description)
 	}
-	if value400.SchemaPath != "/path/to/mes couilles" {
-		t.Errorf("The second ResponseBodys of the first handler should have the SchemaPath '/path/to/mes couilles' but got '%s'", value400.SchemaPath)
+	if value400.Content.ContentInfo["application/json"].Ref.SchemaPath != "/path/to/mes couilles" {
+		t.Errorf("The second ResponseBodys of the first handler should have the SchemaPath '/path/to/mes couilles' but got '%s'", value400.Content.ContentInfo["application/json"].Ref.SchemaPath)
 	}
 }

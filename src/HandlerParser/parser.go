@@ -3,6 +3,7 @@ package handlerparser
 import (
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 // This regexp is used to match the handler start
@@ -32,28 +33,43 @@ var descriptionRegexp = regexp.MustCompile(`^[ |\t]*//@-[ |\t]*(?i)(description)
 // This regexp is used to match the handler requestbody or response schema
 var schemaRegexp = regexp.MustCompile(`^[ |\t]*//@-[ |\t]*(?i)(schema)[ |\t]*:[ |\t]*(.*)`)
 
+// This regexp is used to match the handler requestbody or response RefType
+var refTypeRegexp = regexp.MustCompile(`(?i)^[ \t]*//@-Types:[ \t]*([^ \t]+(?:[ \t]*,[ \t]*[^ \t]+)*)[ \t]*$`)
+
 /** @brief This function iterates trough the comments passed as parametter and creates a new RequestBody based on the comments
  * @param comments The comments to parse
  * @return RequestBody a RequestBody created by the informations
  */
 func getReqBody(comments []string) RequestBody {
-	var redBody RequestBody
+	var reqBody RequestBody
+	content := make(map[string]Schema)
 
 	for _, line := range comments {
 		foundComment := false
 		if descriptionRegexp.MatchString(line) {
 			submatch := descriptionRegexp.FindStringSubmatch(line)
-			redBody.Description = submatch[2]
+			reqBody.Description = submatch[2]
+			foundComment = true
+		}
+		if (refTypeRegexp.MatchString(line)) {
+			submatch := refTypeRegexp.FindStringSubmatch(line)
+			types := strings.Split(submatch[1], ",")
+			for _, t := range types {
+				content[t] = Schema{}
+			}
 			foundComment = true
 		}
 		if schemaRegexp.MatchString(line) {
 			submatch := schemaRegexp.FindStringSubmatch(line)
-			redBody.SchemaPath = submatch[2]
+			for it, t := range content {
+				t.Ref.SchemaPath = submatch[2]
+				content[it] = t
+			}
 			foundComment = true
 		}
 		if requiredRegexp.MatchString(line) {
 			submatch := requiredRegexp.FindStringSubmatch(line)
-			redBody.IsRequired = submatch[2] == "true"
+			reqBody.IsRequired = submatch[2] == "true"
 			foundComment = true
 		}
 
@@ -61,7 +77,8 @@ func getReqBody(comments []string) RequestBody {
 			break
 		}
 	}
-	return redBody
+	reqBody.Content.ContentInfo = content
+	return reqBody
 }
 
 /** @brief This function iterates trough the comments passed as parametter and creates a new ResponseBody based on the comments
@@ -71,7 +88,9 @@ func getReqBody(comments []string) RequestBody {
 func getResBody(comments []string) ResponseBody {
 	var resBody ResponseBody
 	var statusDetails StatusDetails
-	var status int 
+	var status int
+	content := make(map[string]Schema)
+
 	for _, line := range comments {
 		foundComment := false
 		if descriptionRegexp.MatchString(line) {
@@ -79,9 +98,20 @@ func getResBody(comments []string) ResponseBody {
 			statusDetails.Description = submatch[2]
 			foundComment = true
 		}
+		if (refTypeRegexp.MatchString(line)) {
+			submatch := refTypeRegexp.FindStringSubmatch(line)
+			types := strings.Split(submatch[1], ",")
+			for _, t := range types {
+				content[t] = Schema{}
+			}
+			foundComment = true
+		}
 		if schemaRegexp.MatchString(line) {
 			submatch := schemaRegexp.FindStringSubmatch(line)
-			statusDetails.SchemaPath = submatch[2]
+			for it, t := range content {
+				t.Ref.SchemaPath = submatch[2]
+				content[it] = t
+			}
 			foundComment = true
 		}
 		if statusRegexp.MatchString(line) {
@@ -92,6 +122,7 @@ func getResBody(comments []string) ResponseBody {
 
 		if !foundComment {
 			newMap := make(map[int]StatusDetails)
+			statusDetails.Content.ContentInfo = content
 			newMap[status] = statusDetails
 			resBody.Status = newMap
 			break

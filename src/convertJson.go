@@ -30,7 +30,7 @@ func convertRequest(requestBodys []handlerparser.RequestBody) map[string]interfa
 	for _, requestBody := range requestBodys {
 		result["description"] = requestBody.Description
 		result["required"] = requestBody.IsRequired
-		result["content"] = requestBody.SchemaPath
+		result["content"] = requestBody.Content
 	}
 	return result
 }
@@ -39,7 +39,7 @@ func convertResponse(responses []handlerparser.ResponseBody) map[string]interfac
 	result := make(map[string]interface{})
 	for _, response := range responses {
 		for key, value := range response.Status {
-			result[strconv.Itoa(key)] = map[string]interface{}{"description": value.Description, "content": value.SchemaPath}
+			result[strconv.Itoa(key)] = map[string]interface{}{"description": value.Description, "content": value.Content}
 		}
 	}
 	return result
