@@ -14,17 +14,65 @@
             "get": {
                 "description": "Get a user based on user name",
                 "requestBody": {
-                    "content": "/path/to/l afrique",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "/path/to/l afrique"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "/path/to/l afrique"
+                            }
+                        },
+                        "application/xml": {
+                            "schema": {
+                                "$ref": "/path/to/l afrique"
+                            }
+                        }
+                    },
                     "description": "creates a new user based on the content of the body",
                     "required": true
                 },
                 "responses": {
                     "200": {
-                        "content": "/path/to/mes couilles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "/path/to/mes couilles"
+                                }
+                            },
+                            "application/x-www-form-urlencoded": {
+                                "schema": {
+                                    "$ref": "/path/to/mes couilles"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "/path/to/mes couilles"
+                                }
+                            }
+                        },
                         "description": "Was able to create a user"
                     },
                     "400": {
-                        "content": "/path/to/mes couilles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "/path/to/mes couilles"
+                                }
+                            },
+                            "application/x-www-form-urlencoded": {
+                                "schema": {
+                                    "$ref": "/path/to/mes couilles"
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "$ref": "/path/to/mes couilles"
+                                }
+                            }
+                        },
                         "description": "Couldn't create new user because the given email already exists in the data base"
                     }
                 },

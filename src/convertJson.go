@@ -22,16 +22,20 @@ type EndpointDetails struct {
 	Responses []handlerparser.ResponseBody `json:"responses"`
 }
 
-// mapD := map[string]interface{}{"apple": 5, "test": map[string]int{"lettuce": 7}}
-// mapB, _ := json.Marshal(mapD)
-// fmt.Println(string(mapB))
+func convertContent(content handlerparser.Content) map[string]interface{} {
+	result := make(map[string]interface{})
+	for key, value := range content.ContentInfo {
+		result[key] = map[string]interface{}{"schema": value.Ref}
+	}
+	return result
+}
 
 func convertRequest(requestBodys []handlerparser.RequestBody) map[string]interface{} {
 	result := make(map[string]interface{})
 	for _, requestBody := range requestBodys {
 		result["description"] = requestBody.Description
 		result["required"] = requestBody.IsRequired
-		result["content"] = requestBody.Content
+		result["content"] = convertContent(requestBody.Content)
 	}
 	return result
 }
@@ -40,7 +44,7 @@ func convertResponse(responses []handlerparser.ResponseBody) map[string]interfac
 	result := make(map[string]interface{})
 	for _, response := range responses {
 		for key, value := range response.Status {
-			result[strconv.Itoa(key)] = map[string]interface{}{"description": value.Description, "content": value.Content}
+			result[strconv.Itoa(key)] = map[string]interface{}{"description": value.Description, "content": convertContent(value.Content)}
 		}
 	}
 	return result
