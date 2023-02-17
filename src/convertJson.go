@@ -33,9 +33,12 @@ func convertContent(content handlerparser.Content) map[string]interface{} {
 func convertRequest(requestBodys []handlerparser.RequestBody) map[string]interface{} {
 	result := make(map[string]interface{})
 	for _, requestBody := range requestBodys {
+		content := convertContent(requestBody.Content)
 		result["description"] = requestBody.Description
 		result["required"] = requestBody.IsRequired
-		result["content"] = convertContent(requestBody.Content)
+		if len(content) != 0 {
+			result["content"] = convertContent(requestBody.Content)
+		}
 	}
 	return result
 }
@@ -44,7 +47,12 @@ func convertResponse(responses []handlerparser.ResponseBody) map[string]interfac
 	result := make(map[string]interface{})
 	for _, response := range responses {
 		for key, value := range response.Status {
-			result[strconv.Itoa(key)] = map[string]interface{}{"description": value.Description, "content": convertContent(value.Content)}
+			content := convertContent(value.Content)
+			if len(content) != 0 {
+				result[strconv.Itoa(key)] = map[string]interface{}{"description": value.Description, "content": content}
+			} else {
+				result[strconv.Itoa(key)] = map[string]interface{}{"description": value.Description}
+			}
 		}
 	}
 	return result
