@@ -27,10 +27,10 @@ var headersRegexp = regexp.MustCompile(`^[ |\t]*//@[ ]*(?i)(headers)`)
 var subHeaderRegexp = regexp.MustCompile(`^[ |\t]*//@-[ ]*([A-z|0-9]*)[ ]*:[ ]*(?i)(true|false)[ ]*,[ ]*(.*)`)
 
 // This regexp is used to match the handler start
-var startRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(EndPointDeclaration_Start)`)
+var StartRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(EndPointDeclaration_Start)`)
 
 // This regexp is used to match the handler end
-var endRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(EndPointDeclaration_end)`)
+var EndRegexp = regexp.MustCompile(`^[ |\t]*//@[ |\t]*(?i)(EndPointDeclaration_end)`)
 
 /** @brief This function is used to parse the endpoint information for an headers from the comment
  * @param comments The comments to parse. This parameter is a slice of string begin at the line after the regexp HeaderRegexp match.
@@ -52,7 +52,7 @@ func parseHeader(comments []string) []Header {
 	return headers
 }
 
-func parseOneEndpoint(comments []string) EndpointData {
+func ParseOneEndpoint(comments []string) EndpointData {
 	currentEndpoint := EndpointData{}
 	for index, line := range comments {
 		if methodsRegexp.MatchString(line) {
@@ -79,23 +79,9 @@ func parseOneEndpoint(comments []string) EndpointData {
 			submatch := endpointDescriptionRegexp.FindStringSubmatch(line)
 			currentEndpoint.Description = submatch[2]
 		}
-		if endRegexp.MatchString(line) {
+		if EndRegexp.MatchString(line) {
 			break
 		}
 	}
 	return currentEndpoint
-}
-
-/** @brief This function is used to parse the endpoint information from the comment
- * @param comments The comments to parse.
- * @return []EndpointData the list of endpoint found in the comments params or an error if the endpoint is not fully defined
- */
-func ParseEndpoint(comments []string) []EndpointData {
-	var endpoints []EndpointData
-	for index, line := range comments {
-		if startRegexp.MatchString(line) {
-			endpoints = append(endpoints, parseOneEndpoint(comments[index+1:]))
-		}
-	}
-	return endpoints
 }

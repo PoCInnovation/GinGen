@@ -1,8 +1,7 @@
 package handlerparser
 
-
 type Reference struct {
-	SchemaPath	string `json:"$ref"`
+	SchemaPath string `json:"$ref"`
 }
 
 type Schema struct {
@@ -14,24 +13,23 @@ type Content struct {
 }
 
 type StatusDetails struct {
-	Description	string
-	Content	Content
+	Description string
+	Content     Content
 }
 
 type RequestBody struct {
-	Description		string
-	Content			Content
-	IsRequired		bool
+	Description string
+	Content     Content
+	IsRequired  bool
 }
 
-
 type ResponseBody struct {
-	Status		map[int]StatusDetails
+	Status map[int]StatusDetails
 }
 
 // This struct is used to store hander informations
 type HandlerData struct {
-	HandlerId		string
-	RequestBodys 	[]RequestBody
-	ResponseBodys 	[]ResponseBody
+	HandlerId     string
+	RequestBodys  []RequestBody
+	ResponseBodys []ResponseBody
 }
