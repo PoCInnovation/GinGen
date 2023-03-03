@@ -5,15 +5,18 @@ package controllers
 //@HandlerId: controllers.CreateUser
 //@RequestBody
 //@-Description: creates a new user based on the content of the body
+//@-Types: application/json,application/xml,application/x-www-form-urlencoded
 //@-Schema: /path/to/l afrique
 //@-required: true
 //@Response
 //@-Status: 200
 //@-Description: Was able to create a user
+//@-Types: application/json,application/xml,application/x-www-form-urlencoded
 //@-Schema: /path/to/mes couilles
 //@Response
 //@-Status: 400
 //@-Description: Couldn't create new user because the given email already exists in the data base
+//@-Types: application/json,application/xml,application/x-www-form-urlencoded
 //@-Schema: /path/to/mes couilles
 
 //@HandlerDeclaration_End

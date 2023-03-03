@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"gingen/src"
-	info "gingen/src/InfoParser"
 	endpointparser "gingen/src/EndpointParser"
 	handlerparser "gingen/src/HandlerParser"
+	info "gingen/src/InfoParser"
 )
 
 type APIinfo struct {
@@ -41,8 +41,8 @@ func mergeStructs(endpoints []endpointparser.EndpointData, handlers []handlerpar
 }
 
 func buildHandlersAndEndpoints(comments []string) ([]endpointparser.EndpointData, []handlerparser.HandlerData) {
-	var endpoints []endpointparser.EndpointData;
-	var handlers []handlerparser.HandlerData;
+	var endpoints []endpointparser.EndpointData
+	var handlers []handlerparser.HandlerData
 	for index, line := range comments {
 		if endpointparser.StartRegexp.MatchString(line) {
 			endpoints = append(endpoints, endpointparser.ParseOneEndpoint(comments[index+1:]))
@@ -51,7 +51,7 @@ func buildHandlersAndEndpoints(comments []string) ([]endpointparser.EndpointData
 			handlers = append(handlers, handlerparser.HandlerParser(comments[index+1:]))
 		}
 	}
-	return endpoints, handlers;
+	return endpoints, handlers
 }
 
 func main() {
@@ -62,10 +62,11 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	endpoints, handlers := buildHandlersAndEndpoints(content);
+	endpoints, handlers := buildHandlersAndEndpoints(content)
 	info, _ := info.ParseInfo(content)
-	apiDetails := mergeStructs(endpoints, handlers)
-	apiInfo := APIinfo{Info: info, Details: apiDetails}
-	jsonDetails := convert_json(apiInfo)
+	endpointDetails := src.MergeStructs(endpoints, handlers)
+	apiInfo := src.APIinfo{OpenApiVersion: "3.0.3", Info: info, Details: endpointDetails}
+	jsonDetails := src.ConvertJson(apiInfo)
 	src.WriteFile(arguments.OutputFile, []string{string(jsonDetails)})
+	// src.ConvertDetails(src.EndpointDetails{})
 }

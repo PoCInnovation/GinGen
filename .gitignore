@@ -1,3 +1,3 @@
-*.json
 /GinGen
 /*.txt
+functional_tests/output_test.json

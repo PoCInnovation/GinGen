@@ -1,0 +1,20 @@
+name: Functionnal Test
+
+on:
+  push:
+
+jobs:
+  functionnal_tests:
+    name: "Run functionnal tests"
+    runs-on: ubuntu-latest
+    container: golang:1.18-alpine
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v3
+      - name: build
+        run: go build -o GinGen main.go
+      - name: Run binary
+        run: ./GinGen $(pwd)/functionnal_tests/testing_file $(pwd)/functionnal_tests/output_test.json
+      - name: Compare output
+        run: diff $(pwd)/functionnal_tests/output_test.json $(pwd)/functionnal_tests/default_output.json
+        timeout-minutes: 2
