@@ -12,12 +12,12 @@ package controllers
 //@-Status: 200
 //@-Description: Was able to create a user
 //@-Types: application/json,application/xml,application/x-www-form-urlencoded
-//@-Schema: /path/to/another_shema
+//@-Schema: /path/to/another_schema
 //@Response
 //@-Status: 400
 //@-Description: Couldn't create new user because the given email already exists in the data base
 //@-Types: application/json,application/xml,application/x-www-form-urlencoded
-//@-Schema: /path/to/another_shema
+//@-Schema: /path/to/another_schema
 
 //@HandlerDeclaration_End
 
