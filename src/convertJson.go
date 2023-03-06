@@ -78,7 +78,7 @@ func convertDetails(details []EndpointDetails) map[string]interface{} {
 	return result
 }
 
-/** @brief This function is used to convert the api INFO in the right json forma
+/*  @brief This function is used to convert the api INFO in the right json forma
  *  @param data: The data to convert in json
  *  @return []byte the result of the marshal conversion
  */

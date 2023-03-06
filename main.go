@@ -7,6 +7,7 @@ import (
 	endpointparser "gingen/src/EndpointParser"
 	handlerparser "gingen/src/HandlerParser"
 	info "gingen/src/InfoParser"
+	warning "gingen/src/Warning"
 )
 
 type APIinfo struct {
@@ -66,7 +67,7 @@ func main() {
 	info, _ := info.ParseInfo(content)
 	endpointDetails := src.MergeStructs(endpoints, handlers)
 	apiInfo := src.APIinfo{OpenApiVersion: "3.0.3", Info: info, Details: endpointDetails}
+	warning.CheckWarning(apiInfo)
 	jsonDetails := src.ConvertJson(apiInfo)
 	src.WriteFile(arguments.OutputFile, []string{string(jsonDetails)})
-	// src.ConvertDetails(src.EndpointDetails{})
 }

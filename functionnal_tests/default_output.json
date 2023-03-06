@@ -17,17 +17,17 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "/path/to/l afrique"
+                                "$ref": "/path/to/schema"
                             }
                         },
                         "application/x-www-form-urlencoded": {
                             "schema": {
-                                "$ref": "/path/to/l afrique"
+                                "$ref": "/path/to/schema"
                             }
                         },
                         "application/xml": {
                             "schema": {
-                                "$ref": "/path/to/l afrique"
+                                "$ref": "/path/to/schema"
                             }
                         }
                     },
@@ -39,17 +39,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "/path/to/mes couilles"
+                                    "$ref": "/path/to/another_schema"
                                 }
                             },
                             "application/x-www-form-urlencoded": {
                                 "schema": {
-                                    "$ref": "/path/to/mes couilles"
+                                    "$ref": "/path/to/another_schema"
                                 }
                             },
                             "application/xml": {
                                 "schema": {
-                                    "$ref": "/path/to/mes couilles"
+                                    "$ref": "/path/to/another_schema"
                                 }
                             }
                         },
@@ -59,17 +59,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "/path/to/mes couilles"
+                                    "$ref": "/path/to/another_schema"
                                 }
                             },
                             "application/x-www-form-urlencoded": {
                                 "schema": {
-                                    "$ref": "/path/to/mes couilles"
+                                    "$ref": "/path/to/another_schema"
                                 }
                             },
                             "application/xml": {
                                 "schema": {
-                                    "$ref": "/path/to/mes couilles"
+                                    "$ref": "/path/to/another_schema"
                                 }
                             }
                         },
