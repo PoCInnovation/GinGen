@@ -16,5 +16,5 @@ jobs:
       - name: Run binary
         run: ./GinGen -i $(pwd)/demo/testing_file -o $(pwd)/demo/output_test.json -c $(pwd)/demo/components.json
       - name: Compare output
-        run: diff -i $(pwd)/demo/output_test.json -o $(pwd)/demo/default_output.json -c $(pwd)/demo/components.json
+        run: diff $(pwd)/demo/output_test.json $(pwd)/demo/default_output.json
         timeout-minutes: 2
