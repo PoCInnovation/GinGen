@@ -80,10 +80,11 @@ func convertDetails(details []EndpointDetails) map[string]interface{} {
 
 /*  @brief This function is used to convert the api INFO in the right json forma
  *  @param data: The data to convert in json
+ *  @param components: The components to convert in json
  *  @return []byte the result of the marshal conversion
  */
-func ConvertJson(data APIinfo) []byte {
-	newData := map[string]interface{}{"openapi": "3.0.3", "info": data.Info, "paths": convertDetails(data.Details)}
+func ConvertJson(data APIinfo, components interface{}) []byte {
+	newData := map[string]interface{}{"components": components, "openapi": "3.0.3", "info": data.Info, "paths": convertDetails(data.Details)}
 	content, err := json.MarshalIndent(newData, "", "    ")
 	if err != nil {
 		fmt.Println(err)

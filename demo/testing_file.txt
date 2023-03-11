@@ -15,7 +15,7 @@ var db = make(map[string]string)
 //@-Status: 200
 //@-Description: respond "pong"
 //@-Types: application/json
-//@-Schema: /path/to/jaj
+//@-Schema: #/components/schemas/Pet
 
 //@HandlerDeclaration_End
 func ping(c *gin.Context) {
@@ -29,12 +29,12 @@ func ping(c *gin.Context) {
 //@-Status: 200
 //@-Description: If the user is in the db, repond with its id and value
 //@-Types: application/json
-//@-Schema: /path/to/jaj
+//@-Schema: #/components/schemas/Order
 //@Response
 //@-Status: 200
 //@-Description: If the user is not in the db, respond with its id and "no value" as value
 //@-Types: application/json
-//@-Schema: /path/to/jaj
+//@-Schema: #/components/schemas/ApiResponse
 
 //@HandlerDeclaration_End
 func getUserInfos(c *gin.Context) {
@@ -53,13 +53,13 @@ func getUserInfos(c *gin.Context) {
 //@RequestBody
 //@-Description: i don t know
 //@-Types: application/json
-//@-Schema: /path/to/jaj
+//@-Schema: #/components/schemas/User
 //@-required: true
 //@Response
 //@-Status: 200
 //@-Description: updatethe db with the given user id, and respond "ok"
 //@-Types: application/json
-//@-Schema: /path/to/jaj
+//@-Schema: #/components/schemas/ApiResponse
 
 //@HandlerDeclaration_End
 func admin(c *gin.Context) {
@@ -78,7 +78,7 @@ func setupRouter() *gin.Engine {
 	// Disable Console Color
 	// gin.DisableConsoleColor()
 	r := gin.Default()
-	
+
 	//@EndPointDeclaration_Start
 	//@Method: GET
 	//@Path: /ping
