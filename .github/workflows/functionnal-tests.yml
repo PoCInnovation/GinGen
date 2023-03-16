@@ -14,7 +14,7 @@ jobs:
       - name: build
         run: go build -o GinGen main.go
       - name: Run binary
-        run: ./GinGen $(pwd)/functionnal_tests/testing_file $(pwd)/functionnal_tests/output_test.json
+        run: ./GinGen -i $(pwd)/demo/testing_file -o $(pwd)/demo/output_test.json -c $(pwd)/demo/components.json
       - name: Compare output
-        run: diff $(pwd)/functionnal_tests/output_test.json $(pwd)/functionnal_tests/default_output.json
+        run: diff $(pwd)/demo/output_test.json $(pwd)/demo/output.json
         timeout-minutes: 2

@@ -38,10 +38,17 @@ func ReadFile(path string, only_comment bool) ([]string, error) {
 /** @brief This function is used to write content in the file path given in parameter.
  * @param path The path to the file.
  * @param content The content to write in the file.
+ * @param ShouldCreated If true, the file will be created if it does not exist. If false, the file will be appended if it exists.
  * @return []string the content of the file
  */
-func WriteFile(path string, content []string) error {
-	file, err := os.Create(path)
+func WriteFile(path string, content []string, ShouldCreated bool) error {
+	var file *os.File
+	var err error
+	if ShouldCreated {
+		file, err = os.Create(path)
+	} else {
+		file, err = os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0600)
+	}
 	if err != nil {
 		return err
 	}
