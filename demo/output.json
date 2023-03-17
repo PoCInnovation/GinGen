@@ -1,0 +1,366 @@
+{
+    "components": {
+        "requestBodies": {
+            "Pet": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Pet"
+                        }
+                    },
+                    "application/xml": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Pet"
+                        }
+                    }
+                },
+                "description": "Pet object that needs to be added to the store"
+            },
+            "UserArray": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "items": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "type": "array"
+                        }
+                    }
+                },
+                "description": "List of user object"
+            }
+        },
+        "schemas": {
+            "Address": {
+                "properties": {
+                    "city": {
+                        "example": "Palo Alto",
+                        "type": "string"
+                    },
+                    "state": {
+                        "example": "CA",
+                        "type": "string"
+                    },
+                    "street": {
+                        "example": "437 Lytton",
+                        "type": "string"
+                    },
+                    "zip": {
+                        "example": "94301",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "address"
+                }
+            },
+            "ApiResponse": {
+                "properties": {
+                    "code": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "##default"
+                }
+            },
+            "Category": {
+                "properties": {
+                    "id": {
+                        "example": 1,
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "example": "Dogs",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "category"
+                }
+            },
+            "Customer": {
+                "properties": {
+                    "address": {
+                        "items": {
+                            "$ref": "#/components/schemas/Address"
+                        },
+                        "type": "array",
+                        "xml": {
+                            "name": "addresses",
+                            "wrapped": true
+                        }
+                    },
+                    "id": {
+                        "example": 100000,
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "username": {
+                        "example": "fehguy",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "customer"
+                }
+            },
+            "Order": {
+                "properties": {
+                    "complete": {
+                        "type": "boolean"
+                    },
+                    "id": {
+                        "example": 10,
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "petId": {
+                        "example": 198772,
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "quantity": {
+                        "example": 7,
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "shipDate": {
+                        "format": "date-time",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "Order Status",
+                        "enum": [
+                            "placed",
+                            "approved",
+                            "delivered"
+                        ],
+                        "example": "approved",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "order"
+                }
+            },
+            "Pet": {
+                "properties": {
+                    "category": {
+                        "$ref": "#/components/schemas/Category"
+                    },
+                    "id": {
+                        "example": 10,
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "example": "doggie",
+                        "type": "string"
+                    },
+                    "photoUrls": {
+                        "items": {
+                            "type": "string",
+                            "xml": {
+                                "name": "photoUrl"
+                            }
+                        },
+                        "type": "array",
+                        "xml": {
+                            "wrapped": true
+                        }
+                    },
+                    "status": {
+                        "description": "pet status in the store",
+                        "enum": [
+                            "available",
+                            "pending",
+                            "sold"
+                        ],
+                        "type": "string"
+                    },
+                    "tags": {
+                        "items": {
+                            "$ref": "#/components/schemas/Tag"
+                        },
+                        "type": "array",
+                        "xml": {
+                            "wrapped": true
+                        }
+                    }
+                },
+                "required": [
+                    "name",
+                    "photoUrls"
+                ],
+                "type": "object",
+                "xml": {
+                    "name": "pet"
+                }
+            },
+            "Tag": {
+                "properties": {
+                    "id": {
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "tag"
+                }
+            },
+            "User": {
+                "properties": {
+                    "email": {
+                        "example": "john@email.com",
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "example": "John",
+                        "type": "string"
+                    },
+                    "id": {
+                        "example": 10,
+                        "format": "int64",
+                        "type": "integer"
+                    },
+                    "lastName": {
+                        "example": "James",
+                        "type": "string"
+                    },
+                    "password": {
+                        "example": "12345",
+                        "type": "string"
+                    },
+                    "phone": {
+                        "example": "12345",
+                        "type": "string"
+                    },
+                    "userStatus": {
+                        "description": "User Status",
+                        "example": 1,
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "username": {
+                        "example": "theUser",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "user"
+                }
+            }
+        },
+        "securitySchemes": {
+            "api_key": {
+                "in": "header",
+                "name": "api_key",
+                "type": "apiKey"
+            },
+            "petstore_auth": {
+                "flows": {
+                    "implicit": {
+                        "authorizationUrl": "https://petstore3.swagger.io/oauth/authorize",
+                        "scopes": {
+                            "read:pets": "read your pets",
+                            "write:pets": "modify pets in your account"
+                        }
+                    }
+                },
+                "type": "oauth2"
+            }
+        }
+    },
+    "info": {
+        "title": "",
+        "description": "",
+        "version": ""
+    },
+    "openapi": "3.0.3",
+    "paths": {
+        "/admin": {
+            "post": {
+                "description": "admin",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "description": "i don t know",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        },
+                        "description": "updatethe db with the given user id, and respond \"ok\""
+                    }
+                },
+                "summary": "admin"
+            }
+        },
+        "/ping": {
+            "get": {
+                "description": "when pinged respond pong",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        },
+                        "description": "respond \"pong\""
+                    }
+                },
+                "summary": "ping test"
+            }
+        },
+        "/user/:name": {
+            "get": {
+                "description": "when called resond with all users infos",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse"
+                                }
+                            }
+                        },
+                        "description": "If the user is not in the db, respond with its id and \"no value\" as value"
+                    }
+                },
+                "summary": "gets user's infos"
+            }
+        }
+    }
+}

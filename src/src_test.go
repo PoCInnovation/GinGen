@@ -39,7 +39,7 @@ func TestReadFileComment(t *testing.T) {
 
 func TestWriteFile(t *testing.T) {
 	content := []string{"Hello,", "I am a test !", "How are you ?"}
-	err := WriteFile("test_data/write.txt", content)
+	err := WriteFile("test_data/write.txt", content, true)
 	if err != nil {
 		t.Errorf("The file should be written without error but got %s", err)
 	}
@@ -60,27 +60,4 @@ func TestWriteFile(t *testing.T) {
 		t.Errorf("The third line should be 'How are you ?' but got '%s'", file[2])
 	}
 	os.Remove("test_data/write.txt")
-}
-
-func TestArgumentGetter(t *testing.T) {
-	os.Args = []string{"gingen", "test_data/argument.txt", "test_data/output.txt"}
-	argument := ArgumentGetter()
-	if argument.InputFile != "test_data/argument.txt" {
-		t.Errorf("The input file should be 'test_data/argument.txt' but got '%s'", argument.InputFile)
-	}
-	if argument.OutputFile != "test_data/output.txt" {
-		t.Errorf("The output file should be 'test_data/output.txt' but got '%s'", argument.OutputFile)
-	}
-}
-
-func TestArgumentErrorHandler(t *testing.T) {
-	os.Args = []string{"gingen", "test_data/argument.txt", "test_data/output.txt"}
-	argument := ArgumentGetter()
-	ArgumentErrorHandler(argument)
-	file, err := os.Open("test_data/output.txt")
-	file.Close()
-	if err != nil {
-		t.Errorf("The file should be open without error but got %s", err)
-	}
-	os.Remove("test_data/output.txt")
 }

@@ -7,6 +7,9 @@ import (
 	endpointparser "gingen/src/EndpointParser"
 	handlerparser "gingen/src/HandlerParser"
 	info "gingen/src/InfoParser"
+	warning "gingen/src/Warning"
+
+	getopt "github.com/pborman/getopt/v2"
 )
 
 type APIinfo struct {
@@ -54,10 +57,19 @@ func buildHandlersAndEndpoints(comments []string) ([]endpointparser.EndpointData
 	return endpoints, handlers
 }
 
+var args src.Argument
+
+func init() {
+	getopt.FlagLong(&args.InputFile, "input", 'i', "The path to the input file")
+	getopt.FlagLong(&args.OutputFile, "output", 'o', "The path to the output file")
+	getopt.FlagLong(&args.Silent, "silent", 's', "Should not print warning")
+	getopt.FlagLong(&args.ComponentFile, "components", 'c', "The path to the component file")
+}
+
 func main() {
-	arguments := src.ArgumentGetter()
-	src.ArgumentErrorHandler(arguments)
-	content, err := src.ReadFile(arguments.InputFile, true)
+	getopt.Parse()
+	src.ArgumentErrorHandler(args)
+	content, err := src.ReadFile(args.InputFile, true)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -66,7 +78,14 @@ func main() {
 	info, _ := info.ParseInfo(content)
 	endpointDetails := src.MergeStructs(endpoints, handlers)
 	apiInfo := src.APIinfo{OpenApiVersion: "3.0.3", Info: info, Details: endpointDetails}
-	jsonDetails := src.ConvertJson(apiInfo)
-	src.WriteFile(arguments.OutputFile, []string{string(jsonDetails)})
-	// src.ConvertDetails(src.EndpointDetails{})
+	if !args.Silent {
+		warning.CheckWarning(apiInfo)
+	}
+	components, err := src.GetComponents(args.ComponentFile)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	jsonDetails := src.ConvertJson(apiInfo, components["components"])
+	src.WriteFile(args.OutputFile, []string{string(jsonDetails)}, true)
 }
