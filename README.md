@@ -2,9 +2,12 @@
 
 Nowadays, in order to make developers' tasks easier, numerous tools of all kinds have been invented. This is particularly true for anything related to code documentation, as it is a crucial part for ensuring that every team member can quickly understand how each part works.
 
-Regarding APIs, a documentation system called Swagger Editor has been implemented to facilitate the understanding of each endpoint and their different bodies and responses. Unfortunately, in order to generate this documentation, Swagger requires a JSON document with different fields to correctly transcribe the information. However, many people would find it simpler and more natural to simply document each function directly in the code, so that it can be transcribed into Swagger documentation.
+Regarding APIs, a documentation system called [Swagger UI](https://swagger.io/tools/swagger-ui/) has been implemented to facilitate the understanding of each endpoint and their different bodies and responses. But in order to generate this documentation, Swagger requires a JSON document with different fields to correctly transcribe the information, known as an [OpenAPI specification](https://swagger.io/specification/).
+This specification is integrated in a whole ecosystem of tools available to create tests, stubs and simplify development processes ⚙️
 
-This is where the idea for **GinGen** came about, an algorithm that allows for a specific documentation present in a **GO file code** to be transcribed **into JSON** that can be used in **Swagger**.
+To generate this JSON specification, many people would find it simpler and more natural to simply document each function directly in the code, so that it can be used to create a specification incrementally and simplify its maintenance. 
+
+This is where the idea for **GinGen** came about, an program that allows for a specific documentation present in a **Go code** to be transcribed into a valid OpenAPI v3 specification that can be used with the tools provided by Swagger and the OpenAPI community 🚀
 
 ## How does it work?
 
@@ -14,29 +17,33 @@ This project focuses on two important parts of an API:
 
 Therefore, there are two types of documentation to look for.
 
-For now, we are parsing only one file at a time, but we plan to delve deeper by allowing the program to be launched at the root of an API in order to retrieve each part of the documentation.
+For now, we are parsing only one file at a time, but we plan to dive deeper by allowing the program to be launched at the root of an API in order to retrieve each part of the documentation.
 
 ## Getting Started
 
 ### Installation
 
 Clone the repository and simply execute:
-```make```
+```sh
+make
+```
 
-to build the GinGen exacutable
-
-### Quickstart
-
-To run the program, two arguments are required:
-- the file to parse
-- the json file in which to write the result.
-
-```./GinGen -i main.go -o doc.json```<br>
-```./GinGen --input main.go --output doc.json```
+to build the `GinGen` executable.
 
 ### Usage
 
-[Explain how to use this project]
+To run the program, two arguments are required:
+- the file to parse
+- the JSON file in which to write the result.
+
+```sh
+./GinGen -i main.go -o doc.json
+
+# Alternative option with the full flags
+./GinGen --input main.go --output doc.json
+```
+
+You can also specify a JSON file containing components to be added to the generated specification using the `-c` or `--component` flag.
 
 ## Get involved
 
@@ -78,6 +85,6 @@ Organization
     </a>
 </p>
 
-> :rocket: Don't hesitate to follow us on our different networks, and put a star 🌟 on `PoC's` repositories
+> 🚀 Don't hesitate to follow us on our different networks, and put a star 🌟 on `PoC's` repositories
 
-> Made with :heart: by PoC
+> Made with ❤️ by PoC
