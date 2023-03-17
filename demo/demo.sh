@@ -1,9 +1,6 @@
 #!/bin/bash
 
-RED="\033[1;31m"
 GREEN="\033[1;32m"
-YELLOW="\033[1;33m"
-BLUE="\033[1;34m"
 CYAN="\033[1;36m"
 NO_COLOR="\033[0m"
 
@@ -17,5 +14,5 @@ fi
 make
 ./GinGen -i /demo/testing_file -o output_demo.json
 echo -e "${GREEN}➜  ${CYAN}[Successfully generate json spec]${NO_COLOR}"
-echo -e "${GREEN}➜  ${CYAN}[Start to generate gin file]${NO_COLOR}"
+echo -e "${GREEN}➜  ${CYAN}[Start to generate file]${NO_COLOR}"
 openapi-generator-cli generate  -i demo/output.json -g $1 -o server
