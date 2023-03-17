@@ -31,7 +31,7 @@ To run the program, two arguments are required:
 - the file to parse
 - the json file in which to write the result.
 
-```./GinGen -i main.go -o doc.json```
+```./GinGen -i main.go -o doc.json```<br>
 ```./GinGen --input main.go --output doc.json```
 
 ### Usage
