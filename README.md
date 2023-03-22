@@ -7,7 +7,20 @@ This specification is integrated in a whole ecosystem of tools available to crea
 
 To generate this JSON specification, many people would find it simpler and more natural to simply document each function directly in the code, so that it can be used to create a specification incrementally and simplify its maintenance. 
 
-This is where the idea for **GinGen** came about, an program that allows for a specific documentation present in a **Go code** to be transcribed into a valid OpenAPI v3 specification that can be used with the tools provided by Swagger and the OpenAPI community 🚀
+This is where the idea for **GinGen** came about, an program that allows for a specific documentation present in a **Go code** to be transcribed into a valid OpenAPI v3 specification that can be used with the tools provided by **Swagger** and the OpenAPI community 🚀
+
+<br>
+
+![Swagger Logo](README_images/SwaggerLogo.png)
+
+<br>
+<br>
+
+**Here is how the result of the code present in the demo file would look like:**
+![demo Swagger exemple](README_images/DemoSwaggerImage.png)
+
+**With each containing its own informations:**
+![demo Swagger information exemple](README_images/DemoSwaggerHandler.png)
 
 ## How does it work?
 
@@ -44,6 +57,120 @@ To run the program, two arguments are required:
 ```
 
 You can also specify a JSON file containing components to be added to the generated specification using the `-c` or `--component` flag.
+
+____________________
+
+There are two types of documentation to provide:
+- one for each Endpoints
+- one for each Handlers
+
+**Let's start with the Endpoints**
+
+We will take for exemple this endpoint:
+
+```r.GET("/ping", ping)```
+
+To document an Endpoint properly we need to start and end its documentation with:
+```//@EndPointDeclaration_Start```
+```//@EndPointDeclaration_End```
+
+Which gives us:
+
+```
+//@EndPointDeclaration_Start
+//@EndPointDeclaration_End
+r.GET("/ping", ping)
+```
+
+Now let's provide it with all the information that are required. Which are:
+- The Method
+- The Path
+- The HandlerId (the handler that the endpoint is linked to)
+- The Summary
+- The Description
+
+So the final result is:
+
+```
+//@EndPointDeclaration_Start
+//@Method: GET
+//@Path: /ping
+//@HandlerId: main.ping
+//@Summary: ping test
+//@Description: when pinged respond pong
+//@EndPointDeclaration_end
+
+r.GET("/ping", ping)
+```  
+
+<br>
+
+**Now, about the Handlers**
+
+We will take for exemple this handler:
+
+```
+func admin(c *gin.Context) {
+	user := c.MustGet(gin.AuthUserKey).(string)
+	// Parse JSON
+	var json struct {
+		Value string `json:"value" binding:"required"`
+	}
+	if c.Bind(&json) == nil {
+		db[user] = json.Value
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	}
+}
+```
+
+To document an Handker properly we need to start and end its documentation with:
+```//@HandlerDeclaration_Start```
+```//@HandlerDeclaration_End```
+
+Now we need to get to the more complicated part, the information.
+Unlike the Enpoints which all contain the same details to provide, handlers can require multiple types of **Bodies** and **Responses**. As a result you can specidy as many bodies and responses as you want.
+
+**Bodies** require:
+- A Description
+- Types
+- A Schema
+- if it is required
+
+**Responses** require:
+- A Status
+- A Description
+- Types
+- A Schema
+
+So the final result is:
+```
+//@HandlerDeclaration_Start
+
+//@HandlerId: main.admin
+//@RequestBody
+//@-Description: a good description
+//@-Types: application/json
+//@-Schema: #/components/schemas/User
+//@-required: true
+//@Response
+//@-Status: 200
+//@-Description: update the db with the given user id, and respond "ok"
+//@-Types: application/json
+//@-Schema: #/components/schemas/ApiResponse
+
+//@HandlerDeclaration_End
+func admin(c *gin.Context) {
+	user := c.MustGet(gin.AuthUserKey).(string)
+	// Parse JSON
+	var json struct {
+		Value string `json:"value" binding:"required"`
+	}
+	if c.Bind(&json) == nil {
+		db[user] = json.Value
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	}
+}
+```
 
 ## Get involved
 
