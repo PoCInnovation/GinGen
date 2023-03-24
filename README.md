@@ -9,18 +9,11 @@ To generate this JSON specification, many people would find it simpler and more 
 
 This is where the idea for **GinGen** came about, an program that allows for a specific documentation present in a **Go code** to be transcribed into a valid OpenAPI v3 specification that can be used with the tools provided by **Swagger** and the OpenAPI community 🚀
 
-<br>
+![Swagger Logo](/.github/assets/swagger-logo.png)
 
-![Swagger Logo](README_images/SwaggerLogo.png)
-
-<br>
-<br>
-
-**Here is how the result of the code present in the demo file would look like:**
-![demo Swagger exemple](README_images/DemoSwaggerImage.png)
-
-**With each containing its own informations:**
-![demo Swagger information exemple](README_images/DemoSwaggerHandler.png)
+**Here is how the result of the code present in the demo file would look like in Swagger UI:**
+![Swagger UI result](/.github/assets/swagger-ui-result.png)
+![Swagger UI single route](/.github/assets/swagger-ui-route.png)
 
 ## How does it work?
 
@@ -58,40 +51,40 @@ To run the program, two arguments are required:
 
 You can also specify a JSON file containing components to be added to the generated specification using the `-c` or `--component` flag.
 
-____________________
+There are two types of documentation to provide in the code:
+<details>
+    <summary>Endpoints</summary>
 
-There are two types of documentation to provide:
-- one for each Endpoints
-- one for each Handlers
+We will take for example this endpoint:
 
-**Let's start with the Endpoints**
+```go
+r.GET("/ping", ping)
+```
 
-We will take for exemple this endpoint:
-
-```r.GET("/ping", ping)```
-
-To document an Endpoint properly we need to start and end its documentation with:
-```//@EndPointDeclaration_Start```
-```//@EndPointDeclaration_End```
+To document an endpoint properly we need to start and end its documentation with:
+```go
+//@EndPointDeclaration_Start
+//@EndPointDeclaration_End
+```
 
 Which gives us:
 
-```
+```go
 //@EndPointDeclaration_Start
 //@EndPointDeclaration_End
 r.GET("/ping", ping)
 ```
 
 Now let's provide it with all the information that are required. Which are:
-- The Method
-- The Path
-- The HandlerId (the handler that the endpoint is linked to)
-- The Summary
-- The Description
+- Method
+- Path
+- HandlerId (the handler that the endpoint is linked to)
+- Summary
+- Description
 
 So the final result is:
 
-```
+```go
 //@EndPointDeclaration_Start
 //@Method: GET
 //@Path: /ping
@@ -99,17 +92,16 @@ So the final result is:
 //@Summary: ping test
 //@Description: when pinged respond pong
 //@EndPointDeclaration_end
-
 r.GET("/ping", ping)
-```  
-
-<br>
-
-**Now, about the Handlers**
-
-We will take for exemple this handler:
-
 ```
+</details>
+
+<details>
+    <summary>Handlers</summary>
+
+We will take for example this handler:
+
+```go
 func admin(c *gin.Context) {
 	user := c.MustGet(gin.AuthUserKey).(string)
 	// Parse JSON
@@ -123,18 +115,19 @@ func admin(c *gin.Context) {
 }
 ```
 
-To document an Handker properly we need to start and end its documentation with:
-```//@HandlerDeclaration_Start```
-```//@HandlerDeclaration_End```
+To document an Handler properly we need to start and end its documentation with:
+```go
+//@HandlerDeclaration_Start
+//@HandlerDeclaration_End
+```
 
 Now we need to get to the more complicated part, the information.
-Unlike the Enpoints which all contain the same details to provide, handlers can require multiple types of **Bodies** and **Responses**. As a result you can specidy as many bodies and responses as you want.
+Unlike the Endpoints which all contain the same details to provide, handlers can require multiple types of **Bodies** and **Responses**. As a result you can specify as many bodies and responses as you want.
 
 **Bodies** require:
 - A Description
 - Types
-- A Schema
-- if it is required
+- A Schema (if it is required)
 
 **Responses** require:
 - A Status
@@ -142,8 +135,8 @@ Unlike the Enpoints which all contain the same details to provide, handlers can 
 - Types
 - A Schema
 
-So the final result is:
-```
+So the final result is similar to this one:
+```go
 //@HandlerDeclaration_Start
 
 //@HandlerId: main.admin
@@ -171,6 +164,7 @@ func admin(c *gin.Context) {
 	}
 }
 ```
+</details>
 
 ## Get involved
 
@@ -178,7 +172,7 @@ You're invited to join this project ! Check out the [contributing guide](./CONTR
 
 If you're interested in how the project is organized at a higher level, please contact the current project manager.
 
-## Our PoC team :heart:
+## Our PoC team ❤️
 
 Developers
 | [<img src="https://github.com/VidsSkids.png?size=85" width=85><br><sub>Victor Massonnat</sub>](https://github.com/VidsSkids) | [<img src="https://github.com/TdeBoynes.png?size=85" width=85><br><sub>Timothée De Boynes</sub>](https://github.com/TdeBoynes)
